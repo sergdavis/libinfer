@@ -8,6 +8,7 @@
 #define __STATE_H__
 
 #include <iostream>
+#include <cassert>
 #include <initializer_list>
 
 //
@@ -91,6 +92,10 @@ class State
    double operator[](unsigned long int i) const { return buffer[i]; }
 
    double & operator[](unsigned long int i) { return buffer[i]; }
+
+   void Mutate(double delta) { assert (false); }
+
+   void UndoMutation() { assert (false); }
 
   private:
     int N;

@@ -8,6 +8,7 @@
 #define __METROPOLIS_H__
 
 #include <iostream>
+#include <vector>
 #include <cmath>
 
 #include "random.h"
@@ -58,7 +59,7 @@ template <class T> class Metropolis
 
     void Sweep(const RealFunction<T> & prob, T & s, double & probs)
     {
-     int d = s.DegreesOfFreedom();
+     int d = s.Size();
      for (int q=0;q<d;++q)
      {
       if (!Move(prob, s, probs)) MCrej++;
@@ -66,7 +67,19 @@ template <class T> class Metropolis
      }
     }
 
-    void Simulate(const RealFunction<T> & model, T & x, long int steps, const RealFunction<T> & property, Block<double> & data)
+    void ClearProperties() 
+    {
+     properties.clear();
+     datasets.clear();
+    }
+
+    void AddProperty(const RealFunction<T> & property, Block<double> & data)
+    {
+     properties.push_back(&property);
+     datasets.push_back(&data);
+    }
+
+    void Simulate(const RealFunction<T> & model, T & x, long int steps)
     {
      double probx = model(x);
      Reset();
@@ -100,7 +113,14 @@ template <class T> class Metropolis
      std::cerr << "DEBUG Ended Burn-in stage\n";
      for (long int n=0;n<steps;++n)
      {
-      data[n] = property(x);
+      auto it2 = datasets.begin();
+      for (auto it = properties.begin();it != properties.end();it++)
+      {
+       RealFunction<T> & property = *(*it);
+       Block<double> & data = *(*it2);
+       data[n] = property(x);
+       it2++;
+      }
       Sweep(model, x, probx);
       if (!OnProductionStep(x, n)) { return; }
      }
@@ -110,6 +130,8 @@ template <class T> class Metropolis
    double delta;
    long int MCrej;
    long int MCcount;
+   std::vector< RealFunction<T> * > properties;
+   std::vector< Block<double> * > datasets;
 
    const int NBUFFER = 10000;
    const double CONVERGENCE_THRESHOLD = 0.001;

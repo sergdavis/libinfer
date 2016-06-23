@@ -1,2 +1,5 @@
 Makefile
 *.o
+libinfer.a
+testmc
+testpso
