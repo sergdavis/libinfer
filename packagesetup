@@ -1,0 +1,39 @@
+#
+#
+#
+
+name = libinfer
+fullname = 'LibInfer'
+version = 0.1
+author = 'SD'
+prefix = /usr/local
+
+language c++
+   compiler = mpiCC -std=c++11
+   linker = mpiCC -std=c++11
+   flags = -g -O3 -Wall -Wno-literal-suffix -ffast-math -funroll-all-loops
+end
+
+directory .
+
+    staticlibrary libinfer
+       language = c++
+       sources = metropolis.cc pso.cc
+       headers = infer/random.h infer/pso.h infer/metropolis.h
+       version = 0.1.0
+    end
+
+    binary testpso
+       language = c++
+       sources = testpso.cc
+       libraries += ./libinfer.a
+    end
+
+    binary testmc
+       language = c++
+       sources = testmc.cc
+       libraries += ./libinfer.a
+    end
+
+end
+
