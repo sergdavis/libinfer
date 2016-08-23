@@ -44,18 +44,29 @@ class Rastrigin: public ObjectiveFunction
    }
 };
 
+class MyMinimizer: public Minimizer
+{
+ public:
+  MyMinimizer(int nparams, int nparticles): Minimizer(nparams, nparticles) { }
+
+  void OnIteration(int n, double objval, const State & current) const
+  { 
+
+
+  }
+};
+
 int main(int argc, char *argv[])
 {
  MPI_Init(&argc, &argv);
  Rastrigin f(10);
- Minimizer pso(10, 100);
+ MyMinimizer pso(10, 100);
 
  State state(10);
  for (int k=0;k<10;++k) state[k] = SignRandom()*100;
  const State & minst = pso.Minimize(f, state, 1.0E-20);
  for (int k=0;k<10;++k) assert (fabs(state[k]) < 100.001);
  std::cout << f(minst) << "\n";
- 
 
  return 0;
 }
