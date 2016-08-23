@@ -27,6 +27,8 @@ namespace pso
   
     virtual void AdvanceParticles(const ObjectiveFunction & obj, const State & globalmin);
 
+    virtual void OnIteration(int step, double objval, const State & current) const { }
+
   private:
    int nparams, nparticles, nprocs;
    double * minibuffer, * buffer;

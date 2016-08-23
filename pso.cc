@@ -119,6 +119,7 @@ const State & Minimizer::Minimize(const ObjectiveFunction & obj, const State & s
   oldval = objc;
   AdvanceParticles(obj, current);
   n++;
+  OnIteration(n, objc, current);
  }
  MPI_Barrier(MPI_COMM_WORLD);
  return current;
