@@ -126,7 +126,7 @@ template <class T> class Metropolis
      }
     }
 
- private: 
+ private:
    double delta;
    long int MCrej;
    long int MCcount;
