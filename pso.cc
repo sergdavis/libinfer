@@ -115,11 +115,11 @@ const State & Minimizer::Minimize(const ObjectiveFunction & obj, const State & s
   UpdateGlobalMinimum(obj);
   double objc = obj(current);
   assert (objc <= oldval);
-  if (objc < tolerance) break;
   oldval = objc;
   AdvanceParticles(obj, current);
   n++;
   OnIteration(n, objc, current);
+  if (objc < tolerance) break;
  }
  MPI_Barrier(MPI_COMM_WORLD);
  return current;
