@@ -24,6 +24,8 @@ namespace pso
     const State & Minimize(const ObjectiveFunction & obj, const State & seed, double tolerance=1.0e-10);
 
     double tolerance, omega, c1, c2;
+
+    void SetBoundary(const State & b1, const State & b2);
   
     virtual void AdvanceParticles(const ObjectiveFunction & obj, const State & globalmin);
 
@@ -34,6 +36,8 @@ namespace pso
    double * minibuffer, * buffer;
    State current;
    State * x, *v, *localmin;
+   State b1, b2;
+   bool boundary_set;
    void UpdateGlobalMinimum(const ObjectiveFunction & obj);
  };
 

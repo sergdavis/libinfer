@@ -28,6 +28,7 @@ Minimizer::Minimizer(int N, int Nparticles)
  buffer = new double[nprocs*(nparams+1)];
  omega = 0.7;
  c1 = c2 = 1.4;
+ boundary_set = false;
 }
 
 Minimizer::~Minimizer()
@@ -82,6 +83,23 @@ void Minimizer::UpdateGlobalMinimum(const ObjectiveFunction & obj)
  current = globalmin;
 }
 
+void Minimizer::SetBoundary(const State & b1, const State & b2)
+{
+ this->b1 = b1;
+ this->b2 = b2;
+ boundary_set = true;
+}
+
+bool Outside(const State & p, const State & b1, const State & b2)
+{
+ assert ((b1.Size() == b2.Size()) && (p.Size() == b1.Size()));
+ for (int q=0;q<b1.Size();++q)
+ {
+  if ((p[q] > b2[q]) || (p[q] < b1[q])) return true;
+ }
+ return false;
+}
+
 void Minimizer::AdvanceParticles(const ObjectiveFunction & obj, const State & globalmin)
 {
  for (int i=0;i<nparticles;++i)
@@ -89,6 +107,10 @@ void Minimizer::AdvanceParticles(const ObjectiveFunction & obj, const State & gl
   double r1 = Random();
   double r2 = Random();
   v[i] = v[i]*omega + (localmin[i]-x[i])*c1*r1 + (globalmin-x[i])*c2*r2;
+  if ((boundary_set) && (Outside(x[i] + v[i], b1, b2)))
+  {
+   for (int q=0;q<v[i].Size();++q) v[i][q] = -1.0*v[i][q];
+  }
   x[i] += v[i];
  }
 }
