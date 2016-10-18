@@ -128,9 +128,9 @@ const State & Minimizer::Minimize(const ObjectiveFunction & obj, const State & s
   for (int q=0;q<nparams;++q)
   {
    x[i][q] = b1[q]+(0.1+0.8*Random())*(b2[q]-b1[q]);
-   assert (!Outside(x[i], b1, b2));
    v[i][q] = SignRandom();
   }
+  assert (!Outside(x[i], b1, b2));
   localmin[i] = x[i];
  }
  x[0] = seed;
