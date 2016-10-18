@@ -112,7 +112,7 @@ void Minimizer::AdvanceParticles(const ObjectiveFunction & obj, const State & gl
   {
    for (int q=0;q<v[i].Size();++q) v[i][q] = -1.0*v[i][q];
   }
-  x[i] += v[i];
+  else { x[i] += v[i]; }
  }
 }
 
