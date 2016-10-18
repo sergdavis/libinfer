@@ -127,7 +127,7 @@ const State & Minimizer::Minimize(const ObjectiveFunction & obj, const State & s
   v[i].Initialize(nparams);
   for (int q=0;q<nparams;++q)
   {
-   x[i][q] = b1[q]+Random()*(b2[q]-b1[q]);
+   x[i][q] = b1[q]+(0.1+0.8*Random())*(b2[q]-b1[q]);
    assert (!Outside(x[i], b1, b2));
    v[i][q] = SignRandom();
   }
