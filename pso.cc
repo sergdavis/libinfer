@@ -104,6 +104,7 @@ void Minimizer::AdvanceParticles(const ObjectiveFunction & obj, const State & gl
 {
  for (int i=0;i<nparticles;++i)
  {
+  if (boundary_set) assert (!Outside(x[i], b1, b2));
   double r1 = Random();
   double r2 = Random();
   v[i] = v[i]*omega + (localmin[i]-x[i])*c1*r1 + (globalmin-x[i])*c2*r2;
