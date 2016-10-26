@@ -45,15 +45,15 @@ template <class T> class Metropolis
     
     virtual bool OnProductionStep(T & x, long int step) { return true; }
 
-    bool Move(const RealFunction<T> & prob, T & s, double & probs)
+    bool Move(const RealFunction<T> & logprob, T & s, double & logprob_s)
     {
      double d = Gaussian(0.0, delta);
      s.Mutate(d);
      double g1 = -(d*d)/(2.0*delta*delta);
      double g2 = -(d*d)/(2.0*delta*delta);
-     double pnew = prob(s);
-     double Q = log(pnew)-log(probs)+g1-g2; // these cancel...???
-     if (log(Random()) < Q) { probs = pnew; return true; }
+     double logpnew = logprob(s);
+     double Q = logpnew-logprob_s+g1-g2; // these cancel...???
+     if (log(Random()) < Q) { logprob_s = logpnew; return true; }
      else { s.UndoMutation(); return false; }
     }
 
@@ -79,9 +79,9 @@ template <class T> class Metropolis
      datasets.push_back(&data);
     }
 
-    void Simulate(const RealFunction<T> & model, T & x, long int steps)
+    void Simulate(const RealFunction<T> & logmodel, T & x, long int steps)
     {
-     double probx = model(x);
+     double logprobx = logmodel(x);
      Reset();
      long int n = 0;
      double * buffer = new double[NBUFFER];
@@ -91,15 +91,15 @@ template <class T> class Metropolis
      std::cerr << "DEBUG Started Burn-in stage\n";
      while (1)
      {
-      Sweep(model, x, probx);
+      Sweep(logmodel, x, logprobx);
       if (n % 50 == 0)
       {
        double f = RejectionSigmoid(RejectionRate()/100.0);
        delta *= f;
       }
       if (!OnBurnInStep(x, n)) { delete [] buffer; return; }
-      xav.Add(log(probx));
-      if (xav.Full()) 
+      xav.Add(logprobx);
+      if (xav.Full())
       { 
        if (bc == NBUFFER) bc = 0;
        buffer[bc] = xav.Average();
@@ -121,7 +121,7 @@ template <class T> class Metropolis
        data[n] = property(x);
        it2++;
       }
-      Sweep(model, x, probx);
+      Sweep(logmodel, x, logprobx);
       if (!OnProductionStep(x, n)) { return; }
      }
     }
