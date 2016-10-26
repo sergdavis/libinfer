@@ -15,8 +15,8 @@ template <class T, class R> class Function
 
 template <class T> class RealFunction: public Function<T, double>
 {
-
-
+ public:
+    virtual double operator()(const T & s) const = 0;
 };
 
 #endif

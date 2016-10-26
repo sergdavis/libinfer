@@ -35,9 +35,9 @@ inline double RejectionSigmoid(double R)
 template <class T> class Metropolis
 {
  public:
-    Metropolis() { Reset(); }
+    Metropolis() { Reset(); ClearProperties(); delta = 1.0; }
 
-    void Reset() { MCrej = 0; MCcount = 0; delta = 2.0; }
+    void Reset() { MCrej = 0; MCcount = 0; }
 
     double RejectionRate() { return 100.0*double(MCrej)/MCcount; }
 
@@ -45,22 +45,20 @@ template <class T> class Metropolis
     
     virtual bool OnProductionStep(T & x, long int step) { return true; }
 
+    void SetDelta(double d) { delta = d; }
+
     bool Move(const RealFunction<T> & logprob, T & s, double & logprob_s)
     {
-     double d = Gaussian(0.0, delta);
-     s.Mutate(d);
-     double g1 = -(d*d)/(2.0*delta*delta);
-     double g2 = -(d*d)/(2.0*delta*delta);
+     s.Mutate(delta);
      double logpnew = logprob(s);
-     double Q = logpnew-logprob_s+g1-g2; // these cancel...???
+     double Q = logpnew-logprob_s;
      if (log(Random()) < Q) { logprob_s = logpnew; return true; }
      else { s.UndoMutation(); return false; }
     }
 
     void Sweep(const RealFunction<T> & prob, T & s, double & probs)
     {
-     int d = s.Size();
-     for (int q=0;q<d;++q)
+     for (int q=0;q<s.Size();++q)
      {
       if (!Move(prob, s, probs)) MCrej++;
       MCcount++;
@@ -79,7 +77,7 @@ template <class T> class Metropolis
      datasets.push_back(&data);
     }
 
-    void Simulate(const RealFunction<T> & logmodel, T & x, long int steps)
+    void Simulate(const RealFunction<T> & logmodel, T & x, long int steps, long int burnin=0)
     {
      double logprobx = logmodel(x);
      Reset();
@@ -92,11 +90,13 @@ template <class T> class Metropolis
      while (1)
      {
       Sweep(logmodel, x, logprobx);
-      if (n % 50 == 0)
+      /*
+      if (n % 200 == 0)
       {
        double f = RejectionSigmoid(RejectionRate()/100.0);
        delta *= f;
       }
+      */
       if (!OnBurnInStep(x, n)) { delete [] buffer; return; }
       xav.Add(logprobx);
       if (xav.Full())
@@ -108,9 +108,9 @@ template <class T> class Metropolis
        if (((fabs(drift) > 0.0) && (fabs(drift) < fabs(buffer[bc-1])*CONVERGENCE_THRESHOLD))) break;
       }
       n++;
-      if (n == MAX_BURNIN) break;
+      if (n >= burnin) break;
      }
-     std::cerr << "DEBUG Ended Burn-in stage\n";
+     std::cerr << "DEBUG Ended Burn-in stage, rejection rate: " << RejectionRate() << "\n";
      for (long int n=0;n<steps;++n)
      {
       auto it2 = datasets.begin();
@@ -125,9 +125,10 @@ template <class T> class Metropolis
       if (!OnProductionStep(x, n)) { return; }
      }
     }
+  
+   double delta;
 
  private:
-   double delta;
    long int MCrej;
    long int MCcount;
    std::vector< RealFunction<T> * > properties;
@@ -135,7 +136,6 @@ template <class T> class Metropolis
 
    const int NBUFFER = 10000;
    const double CONVERGENCE_THRESHOLD = 0.001;
-   const int MAX_BURNIN = 200000;
 };
 
 #endif

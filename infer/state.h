@@ -93,9 +93,9 @@ class State
 
    double & operator[](unsigned long int i) { return buffer[i]; }
 
-   void Mutate(double delta) { assert (false); }
+   virtual void Mutate(double delta) { assert (false); }
 
-   void UndoMutation() { assert (false); }
+   virtual void UndoMutation() { assert (false); }
 
   private:
     int N;
