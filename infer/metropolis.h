@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <vector>
+#include <cassert>
 #include <cmath>
 
 #include "random.h"
@@ -87,7 +88,6 @@ template <class T> class Metropolis
      int bc = 0;
      SimpleAverage xav(100);
      adapt_steps = adapt;
-     std::cerr << "DEBUG Started Burn-in stage\n";
      while (1)
      {
       Sweep(logmodel, x, logprobx);
@@ -108,7 +108,6 @@ template <class T> class Metropolis
       n++;
       if (n >= burnin) break;
      }
-     std::cerr << "DEBUG Ended Burn-in stage, rejection rate: " << RejectionRate() << "\n";
      for (long int n=0;n<steps;++n)
      {
       auto it2 = datasets.begin();

@@ -59,11 +59,11 @@ class MyMetropolis: public Metropolis<Ising2DState>
  public:
     bool OnProductionStep(Ising2DState & s, long int step) override
     {  
-     if (step % 100 == 0)
+     if (step % 100 == 0) 
      {
       energy.Add(H(s));
       magnet.Add(MM(s));
-      //std::cout << step << "  " << energy.Average() << "\n";
+      std::cout << step << "  " << magnet.Average() << "\n";
      }
      return true; 
     }
@@ -74,19 +74,14 @@ int main()
  InitRandom();
  MyMetropolis m;
 
- Ising2DState seed(8);
- 
- double T = 0.05;
- while (1)
- {
-  for (int i=0;i<8;++i) 
-     for (int j=0;j<8;++j) seed.Set(i, j, 1);
- 
-  CanonicalModel<Ising2DState> canonical(H, 1.0/T);
-  m.Simulate(canonical, seed, 500000, 500000);
-  std::cout << T << "  " << energy.Average()/float(8*8) << "  " << "  " << magnet.Average() << "  " <<  m.RejectionRate() << "\n";
-  T += 0.1;
- }
+ int L = 32;
+ Ising2DState seed(L);
+ double T = 2.2;
+ for (int i=0;i<L;++i) 
+    for (int j=0;j<L;++j) seed.Set(i, j, 1);
+ CanonicalModel<Ising2DState> canonical(H, 1.0/T);
+ m.Simulate(canonical, seed, 50000, 50000);
+ std::cout << T << "  " << energy.Average()/float(L*L) << "  " << "  " << magnet.Average() << "  " <<  m.RejectionRate() << "\n";
 
  return 0;
 }
