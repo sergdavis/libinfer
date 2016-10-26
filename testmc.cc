@@ -43,8 +43,8 @@ class GammaModel: public RealFunction<SingleState>
    double k, theta;
 };
 
-WindowAverage x_av(100000);
-WindowAverage logx_av(100000);
+WindowAverage x_av(300000);
+WindowAverage logx_av(300000);
 
 class MyMetropolis: public Metropolis<SingleState>
 {
@@ -52,7 +52,7 @@ class MyMetropolis: public Metropolis<SingleState>
     MyMetropolis() { }
     bool OnProductionStep(SingleState & s, long int step) override
     {  
-     if (step % 100 == 0)
+     if (step % 500 == 0)
      {
       x_av.Add(s[0]);
       logx_av.Add(log(s[0]));
@@ -69,8 +69,8 @@ int main()
 
  GammaModel G(4.5, 3.0);
  SingleState seed(10.0);
- m.SetDelta(48.0);
- m.Simulate(G, seed, 5000000, 3000000);
+ m.SetDelta(20.0);
+ m.Simulate(G, seed, 5000000, 3000000, 100);
  std::cout << "Rejection: " << m.RejectionRate() << "\n";
  std::cout << "<x> = " << x_av.Average() << "\n";
  std::cout << "<ln x> = " << logx_av.Average() << "\n";

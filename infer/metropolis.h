@@ -77,7 +77,7 @@ template <class T> class Metropolis
      datasets.push_back(&data);
     }
 
-    void Simulate(const RealFunction<T> & logmodel, T & x, long int steps, long int burnin=0)
+    void Simulate(const RealFunction<T> & logmodel, T & x, long int steps, long int burnin=0, long int adapt=0)
     {
      double logprobx = logmodel(x);
      Reset();
@@ -86,17 +86,15 @@ template <class T> class Metropolis
      for (int i=0;i<NBUFFER;++i) buffer[i] = 0.0;
      int bc = 0;
      SimpleAverage xav(100);
+     adapt_steps = adapt;
      std::cerr << "DEBUG Started Burn-in stage\n";
      while (1)
      {
       Sweep(logmodel, x, logprobx);
-      /*
-      if (n % 200 == 0)
+      if ((adapt_steps > 0) && (n % adapt_steps == 0))
       {
-       double f = RejectionSigmoid(RejectionRate()/100.0);
-       delta *= f;
+       delta *= RejectionSigmoid(RejectionRate()/100.0);
       }
-      */
       if (!OnBurnInStep(x, n)) { delete [] buffer; return; }
       xav.Add(logprobx);
       if (xav.Full())
@@ -131,6 +129,7 @@ template <class T> class Metropolis
  private:
    long int MCrej;
    long int MCcount;
+   long int adapt_steps;
    std::vector< RealFunction<T> * > properties;
    std::vector< Block<double> * > datasets;
 
