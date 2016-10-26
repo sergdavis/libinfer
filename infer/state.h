@@ -88,11 +88,11 @@ class State
     return s;
    } 
 
-   int Size() const { return N; }
-
    double operator[](unsigned long int i) const { return buffer[i]; }
 
    double & operator[](unsigned long int i) { return buffer[i]; }
+
+   virtual int Size() const { return N; }
 
    virtual void Mutate(double delta) { assert (false); }
 

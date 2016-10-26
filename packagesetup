@@ -34,5 +34,11 @@ directory .
        sources = test_mcgamma.cc
        libraries += ./libinfer.a
     end
+
+    binary test_ising2d
+       language = c++
+       sources = test_ising2d.cc
+       libraries += ./libinfer.a
+    end
 end
 

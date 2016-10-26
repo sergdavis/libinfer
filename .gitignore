@@ -2,4 +2,5 @@ Makefile
 *.o
 libinfer.a
 test_mcgamma
+test_ising2d
 testpso
