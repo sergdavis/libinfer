@@ -34,17 +34,5 @@ directory .
        sources = testmc.cc
        libraries += ./libinfer.a
     end
-
-    binary master_mc
-       language = c++
-       sources = master_mc.cc
-       libraries += ./libinfer.a
-    end
-
-    binary master_mc2
-       language = c++
-       sources = master_mc2.cc
-       libraries += ./libinfer.a
-    end
 end
 
