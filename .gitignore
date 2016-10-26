@@ -1,5 +1,5 @@
 Makefile
 *.o
 libinfer.a
-testmc
+test_mcgamma
 testpso

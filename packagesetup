@@ -29,9 +29,9 @@ directory .
        libraries += ./libinfer.a
     end
 
-    binary testmc
+    binary test_mcgamma
        language = c++
-       sources = testmc.cc
+       sources = test_mcgamma.cc
        libraries += ./libinfer.a
     end
 end

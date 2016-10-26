@@ -10,6 +10,7 @@
 #include <iostream>
 #include <cassert>
 #include <initializer_list>
+#include "random.h"
 
 //
 //
@@ -109,6 +110,27 @@ inline std::ostream & operator<<(std::ostream & os, const State & s)
  os << ">";
  return os;
 }
+
+class PositiveRealState: public State
+{
+ public:
+   PositiveRealState(double x): State(1) { (*this)[0] = xold = x; }
+
+   void Mutate(double delta) override
+   { 
+    xold = (*this)[0];
+    while (1)
+    {
+     (*this)[0] = xold + SignRandom()*delta;
+     if ((*this)[0] >= 0.0) break;
+    }
+   }
+
+   void UndoMutation() override { (*this)[0] = xold; }
+
+ private:
+  double xold;
+};
 
 #endif
 
