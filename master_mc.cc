@@ -48,8 +48,8 @@ double DoMonteCarlo(double seed, double L1, double L2, double & F1, double & F2,
   }
   if ((nstep > 0) && (nstep % 2000 == 0))
   {
-   if ( (float(rej)/float(nstep)) > 0.7) MCSTEP *= 0.998;
-   if ( (float(rej)/float(nstep)) < 0.7) MCSTEP *= 1.002;
+   if ( (float(rej)/float(nstep)) > 0.75) MCSTEP *= 0.998;
+   if ( (float(rej)/float(nstep)) < 0.65) MCSTEP *= 1.002;
   }
  }
  f1av /= double(count);
@@ -62,6 +62,11 @@ double DoMonteCarlo(double seed, double L1, double L2, double & F1, double & F2,
  var1 = f1f1av - f1av*f1av;
  var2 = f2f2av - f2av*f2av;
  covar = f1f2av - f1av*f2av;
+
+ //
+ double zzz = 0.01*Random();
+ double L1 = L1 - 2.0*zzz*((F1-f1av)*var1 + (F2-f2av)*covar);
+ double L2 = L2 - 2.0*zzz*((F1-f1av)*covar + (F2-f2av)*var2);
  return 100.0*float(rej)/float(n);
 }
 
