@@ -111,6 +111,9 @@ inline std::ostream & operator<<(std::ostream & os, const State & s)
  return os;
 }
 
+//
+//
+//
 class PositiveRealState: public State
 {
  public:
