@@ -15,7 +15,7 @@ inline double Random() { return (rand() % 10000000)/double(10000000.0); }
 
 inline double SignRandom() { return 2.0*Random()-1.0; }
 
-inline double Gaussian(double mu, double sigma)
+inline double GaussianRandom(double mu, double sigma)
 { 
  // Box-Muller method
  double u = Random();

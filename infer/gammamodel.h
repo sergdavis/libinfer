@@ -8,6 +8,12 @@
 #define __GAMMA_MODEL_H__
 
 #include "state.h"
+#include "function.h"
+
+inline double GammaPDF(double x, double k, double theta)
+{
+ return exp(-x/theta)*pow(x, k-1.0)/(gamma(k)*pow(theta,k));
+}
 
 class GammaModel: public RealFunction<PositiveRealState>
 {
