@@ -47,5 +47,12 @@ directory .
        sources = test_ising2d.cc
        libraries += ./libinfer.a
     end
+
+    binary test_bezier
+
+       language = c++
+       sources = test_bezier.cc
+       libraries += ./libinfer.a
+    end
 end
 
