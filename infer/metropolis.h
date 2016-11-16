@@ -83,10 +83,10 @@ template <class T> class Metropolis
      double logprobx = logmodel(x);
      Reset();
      long int n = 0;
-     double * buffer = new double[NBUFFER];
-     for (int i=0;i<NBUFFER;++i) buffer[i] = 0.0;
-     int bc = 0;
-     SimpleAverage xav(100);
+     //double * buffer = new double[NBUFFER];
+     //for (int i=0;i<NBUFFER;++i) buffer[i] = 0.0;
+     //int bc = 0;
+     //SimpleAverage xav(100);
      adapt_steps = adapt;
      while (1)
      {
@@ -95,8 +95,9 @@ template <class T> class Metropolis
       {
        delta *= RejectionSigmoid(RejectionRate()/100.0);
       }
-      if (!OnBurnInStep(x, n)) { delete [] buffer; return; }
-      xav.Add(logprobx);
+      if (!OnBurnInStep(x, n)) { return ; } //delete [] buffer; return;
+      //xav.Add(logprobx);
+      /*
       if (xav.Full())
       { 
        if (bc == NBUFFER) bc = 0;
@@ -105,6 +106,7 @@ template <class T> class Metropolis
        double drift = CheckDrift(buffer, bc); 
        if (((fabs(drift) > 0.0) && (fabs(drift) < fabs(buffer[bc-1])*CONVERGENCE_THRESHOLD))) break;
       }
+      */
       n++;
       if (n >= burnin) break;
      }
@@ -132,8 +134,8 @@ template <class T> class Metropolis
    std::vector< RealFunction<T> * > properties;
    std::vector< Block<double> * > datasets;
 
-   const int NBUFFER = 10000;
-   const double CONVERGENCE_THRESHOLD = 0.001;
+//   const int NBUFFER = 10000;
+//   const double CONVERGENCE_THRESHOLD = 0.001;
 };
 
 #endif
