@@ -13,7 +13,7 @@
 template <class T> class CanonicalModel: public MaxEntModel<T>
 {
  public:
-   CanonicalModel(const Hamiltonian<T> & H, double beta): MaxEntModel<T>(1)
+   CanonicalModel(const Hamiltonian<T> & H, double beta): MaxEntModel<T>()
    {
     MaxEntModel<T>::SetParams(State({beta}));
     MaxEntModel<T>::AddConstraint(H);

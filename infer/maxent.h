@@ -9,39 +9,45 @@
 
 #include "function.h"
 #include "state.h"
+#include <list>
 
 template <class T> class MaxEntModel: public RealFunction<T>
 {
  public:
 
-    MaxEntModel(int nparams)
-    {
-     f = new const RealFunction<T> *[nparams];
-     param_index = 0;
-     logprior = NULL;
-    }
+    MaxEntModel() { logprior = NULL; }
 
-    virtual ~MaxEntModel() { delete [] f; }
+    virtual ~MaxEntModel() { }
 
     void SetPrior(const RealFunction<T> & lprior) { logprior = &lprior; }
 
-    void AddConstraint(const RealFunction<T> & R) { f[param_index++] = &R; }
+    void AddConstraint(const RealFunction<T> & R) { f.push_back(&R); }
+
+    void AddConstraint(const RealFunction<T> & R, double Rval)
+    {
+     AddConstraint(R);
+     F.push_back(Rval);
+    }
 
     void SetParams(const State & p) { params = p; }
 
     double operator()(const T & x) const override
     {
      double logp = 0.0;
-     for (int i=0;i<params.Size();++i) logp -= params[i]*(*(f[i]))(x);
+     int i = 0;
+     for (auto it=f.begin();it!=f.end();++it)
+     {
+      logp -= params[i++]*(*(*it))(x);
+     }
      if (logprior == NULL) return logp;
      else return logp+(*logprior)(x);
     }
 
  private:
    const RealFunction<T> * logprior;
-   const RealFunction<T> ** f;
+   std::list<const RealFunction<T> *> f;
+   std::list<double> F;
    State params;
-   int param_index;
 };
 
 #endif

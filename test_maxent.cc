@@ -51,7 +51,7 @@ int main()
  X f1;
  LogX f2;
 
- MaxEntModel<PositiveRealState> G(2);
+ MaxEntModel<PositiveRealState> G;
  G.AddConstraint(f1);
  G.AddConstraint(f2);
  G.SetParams(params);
