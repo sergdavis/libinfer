@@ -37,12 +37,15 @@ class WindowAverage
  public:
    WindowAverage(long int nwindow): n(nwindow) 
    { 
-    count = 0;
-    xav = 0.0;
-    xav2 = 0.0;
+    Clear();
    }
 
    WindowAverage(): n(1)
+   {
+    Clear();
+   }
+
+   void Clear()
    {
     count = 0;
     xav = 0.0;
@@ -72,12 +75,15 @@ class SimpleAverage
  public:
    SimpleAverage(long int nwindow): n(nwindow)
    {
-    count = 0;
-    xav = 0.0;
-    xav2 = 0.0;
+    Clear();
    }
 
    SimpleAverage(): n(1)
+   {
+    Clear();
+   }
+
+   void Clear()
    {
     count = 0;
     xav = 0.0;
