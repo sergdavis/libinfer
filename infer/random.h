@@ -18,6 +18,8 @@ inline long int RandomInt(long int a, long int b)
 
 inline double Random() { return (rand() % 10000000)/double(10000000.0); }
 
+inline double Random(double a, double b) { return a+Random()*(b-a); }
+
 inline double SignRandom() { return 2.0*Random()-1.0; }
 
 inline double GaussianRandom(double mu, double sigma)
