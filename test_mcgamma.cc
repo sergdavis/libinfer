@@ -33,7 +33,7 @@ int main()
  GammaModel G(4.5, 3.0);
  PositiveRealState seed(10.0);
  m.SetDelta(20.0);
- m.Simulate(G, seed, 5000000, 3000000, 100);
+ m.Simulate(G, seed, 5000000, 10000000, 100);
  std::cout << "Rejection: " << m.RejectionRate() << "\n";
  std::cout << "<x> = " << x_av.Average() << "\n";
  std::cout << "<ln x> = " << logx_av.Average() << "\n";
