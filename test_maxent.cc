@@ -6,9 +6,6 @@
 
 #include "infer/maxent.h"
 #include "infer/metropolis.h"
-#include <initializer_list>
-#include <vector>
-#include <functional>
 
 WindowAverage x_av(300000);
 WindowAverage logx_av(300000);
@@ -51,12 +48,10 @@ int main()
  PositiveRealState seed(10.0);
 
  const State params({ 1.0/3.0, -3.5});
- FlatPrior<PositiveRealState> logprior;
  X f1;
  LogX f2;
 
  MaxEntModel<PositiveRealState> G(2);
- G.SetPrior(logprior);
  G.AddConstraint(f1);
  G.AddConstraint(f2);
  G.SetParams(params);

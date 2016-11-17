@@ -10,12 +10,6 @@
 #include "function.h"
 #include "state.h"
 
-template <class T> class FlatPrior: public RealFunction<T>
-{
- public:
-   double operator()(const T & x) const override { return 0.0; }
-};
-
 template <class T> class MaxEntModel: public RealFunction<T>
 {
  public:
