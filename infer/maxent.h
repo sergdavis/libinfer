@@ -7,7 +7,6 @@
 #ifndef __MAXENT_H__
 #define __MAXENT_H__
 
-#include <list>
 #include "function.h"
 #include "state.h"
 
@@ -25,6 +24,7 @@ template <class T> class MaxEntModel: public RealFunction<T>
     {
      f = new const RealFunction<T> *[nparams];
      param_index = 0;
+     logprior = NULL;
     }
 
     virtual ~MaxEntModel() { delete [] f; }
@@ -39,7 +39,8 @@ template <class T> class MaxEntModel: public RealFunction<T>
     {
      double logp = 0.0;
      for (int i=0;i<params.Size();++i) logp -= params[i]*(*(f[i]))(x);
-     return logp+(*logprior)(x);
+     if (logprior == NULL) return logp;
+     else return logp+(*logprior)(x);
     }
 
  private:
