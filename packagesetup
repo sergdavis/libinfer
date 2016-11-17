@@ -65,5 +65,11 @@ directory .
        sources = test_maxent.cc
        libraries += ./libinfer.a
     end
+
+    binary test_maxent_auto
+       language = c++
+       sources = test_maxent_auto.cc
+       libraries += ./libinfer.a
+    end
 end
 
