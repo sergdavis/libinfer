@@ -152,6 +152,8 @@ class PositiveRealState: public State
     }
    }
 
+   double Value() const { return (*this)[0]; }
+
    void UndoMutation() override { (*this)[0] = xold; }
 
  private:
