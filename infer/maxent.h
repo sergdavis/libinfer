@@ -45,6 +45,8 @@ template <class T> class MaxEntModel: public BayesModel<T>
 
     void SetParams(const State & p) { L.params = p; }
 
+    const State & Params() const { return L.params; }
+
  private:
    std::list<double> F;
    MaxEntLikelihood<T> L;
