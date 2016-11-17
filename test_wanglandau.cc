@@ -5,11 +5,11 @@
  */
 
 #include <iomanip>
-#include "infer/function.h"
+#include "infer/hamiltonian.h"
 #include "infer/wanglandau.h"
 #include "infer/state.h"
 
-class QuadraticEnergy: public RealFunction<MutableState>
+class Quadratic: public Hamiltonian<MutableState>
 {
  public:
     double operator()(const MutableState & s) const override
@@ -24,7 +24,7 @@ class QuadraticEnergy: public RealFunction<MutableState>
 class MyWL: public WangLandau<MutableState>
 {
  public:
-   MyWL(const QuadraticEnergy & h, double emin, double emax, int bins): WangLandau<MutableState>(h, emin, emax, bins)
+   MyWL(const Quadratic & h, double emin, double emax, int bins): WangLandau<MutableState>(h, emin, emax, bins)
    {
     this->emin = emin;
     this->emax = emax;
@@ -37,7 +37,7 @@ class MyWL: public WangLandau<MutableState>
 int main()
 {
  InitRandom();
- QuadraticEnergy H;
+ Quadratic H;
  MyWL WL(H, 0.0, 150.0, 300);
  MutableState seed({ 4.0, 4.0, 4.0, 4.0, 4.0 });
  WL.SetDelta(5.0);
