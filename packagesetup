@@ -49,9 +49,14 @@ directory .
     end
 
     binary test_bezier
-
        language = c++
        sources = test_bezier.cc
+       libraries += ./libinfer.a
+    end
+
+    binary test_wanglandau
+       language = c++
+       sources = test_wanglandau.cc
        libraries += ./libinfer.a
     end
 end

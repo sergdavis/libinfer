@@ -103,6 +103,29 @@ class State
     double * buffer;
  };
 
+class MutableState: public State
+{
+ public:
+   MutableState(const std::initializer_list<double> & L): State(L) { }
+
+   void Mutate(double delta)
+   {
+    int k = RandomInt(0, Size()-1);
+    kbackup = k;
+    backup = (*this)[k];
+    (*this)[k] += SignRandom()*delta;
+   }
+
+   void UndoMutation()
+   {
+    (*this)[kbackup] = backup;
+   }
+
+ private:
+   double backup;
+   int kbackup;
+};
+
 inline std::ostream & operator<<(std::ostream & os, const State & s)
 {
  os << "<";
