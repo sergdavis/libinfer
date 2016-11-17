@@ -5,4 +5,5 @@ test_mcgamma
 test_ising2d
 test_bezier
 test_wanglandau
+test_maxent
 testpso
