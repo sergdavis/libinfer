@@ -29,6 +29,8 @@ inline double ddotb(int i, int N, double t)
 class Bezier 
 {
  public:
+    Bezier(const std::vector<State> & S): ctrpoints(S) { ncontrol = S.size(); }
+   
 	Bezier(const std::initializer_list<State> & S)
     {
 	 ncontrol = 0.0;
