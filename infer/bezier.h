@@ -41,6 +41,12 @@ class Bezier
      }
     }
 
+    Bezier(int N)
+    {
+     for (int i=0;i<N;++i) ctrpoints.push_back(State());
+     ncontrol = N;
+    }
+
 	State operator()(double t) const 
     {
 	 State s(ctrpoints[0].Size());
@@ -101,6 +107,7 @@ class Bezier
 	void UndoMutation() { ctrpoints[i][j] = exctrpoint; }
 
     const std::vector <State> & ControlPoints() const { return ctrpoints; }
+    std::vector <State> & ControlPoints() { return ctrpoints; }
 
 private:
    std::vector <State> ctrpoints;
