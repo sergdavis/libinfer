@@ -93,14 +93,14 @@ template <class T> class Metropolis
      adapt_steps = adapt;
      while (1)
      {
-      while (1)
-      {
-       try{ Sweep(logmodel, x, logprobx); break; }
-       catch (const InvalidState & e) { }
+      try
+      { 
+       Sweep(logmodel, x, logprobx);
+       if ((adapt_steps > 0) && (n % adapt_steps == 0)) AdaptDelta();
+       if (!OnBurnInStep(x, n)) { return ; }
+       n++;
       }
-      if ((adapt_steps > 0) && (n % adapt_steps == 0)) AdaptDelta();
-      if (!OnBurnInStep(x, n)) { return ; }
-      n++;
+      catch (const InvalidState & e) { }
       if (n >= burnin) break;
      }
      for (long int n=0;n<steps;++n)
@@ -115,10 +115,14 @@ template <class T> class Metropolis
       }
       while (1)
       {
-       try{ Sweep(logmodel, x, logprobx); break; }
+       try 
+       { 
+        Sweep(logmodel, x, logprobx); 
+        if (!OnProductionStep(x, n)) { return; }
+        break; 
+       }
        catch (const InvalidState & e) { }
       }
-      if (!OnProductionStep(x, n)) { return; }
      }
     }
   
