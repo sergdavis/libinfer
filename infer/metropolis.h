@@ -22,6 +22,12 @@ inline double RejectionSigmoid(double R)
  return (1.0+0.2*(1.0/(1.0+exp(7.0*(R-0.7)))-0.5));
 }
 
+class InvalidState: public std::exception
+{
+ public:
+   const char * what() const noexcept override { return "Metropolis considered an invalid state"; }
+};
+
 template <class T> class Metropolis
 {
  public:
@@ -87,7 +93,11 @@ template <class T> class Metropolis
      adapt_steps = adapt;
      while (1)
      {
-      Sweep(logmodel, x, logprobx);
+      while (1)
+      {
+       try{ Sweep(logmodel, x, logprobx); break; }
+       catch (const InvalidState & e) { }
+      }
       if ((adapt_steps > 0) && (n % adapt_steps == 0)) AdaptDelta();
       if (!OnBurnInStep(x, n)) { return ; }
       n++;
@@ -103,7 +113,11 @@ template <class T> class Metropolis
        data[n] = property(x);
        it2++;
       }
-      Sweep(logmodel, x, logprobx);
+      while (1)
+      {
+       try{ Sweep(logmodel, x, logprobx); break; }
+       catch (const InvalidState & e) { }
+      }
       if (!OnProductionStep(x, n)) { return; }
      }
     }
