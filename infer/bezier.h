@@ -47,7 +47,7 @@ class Bezier
      ncontrol = N;
     }
 
-	State operator()(double t) const 
+    virtual State operator()(double t) const
     {
 	 State s(ctrpoints[0].Size());
 	 for (unsigned int j=0; j < ctrpoints.size(); j++)
