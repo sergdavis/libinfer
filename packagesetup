@@ -26,7 +26,7 @@ directory .
 
     headers infer_headers
        sources = infer/average.h infer/block.h infer/gammamodel.h infer/gaussianmodel.h infer/ising2d.h infer/minimizer.h infer/pso.h infer/state.h \
-                 infer/binarymatrix.h infer/function.h infer/hamiltonian.h infer/metropolis.h infer/objfunction.h infer/random.h infer/statmechanics.h infer/bezier.h
+                 infer/binarymatrix.h infer/function.h infer/hamiltonian.h infer/metropolis.h infer/objfunction.h infer/random.h infer/statmechanics.h infer/bezier.h infer/region.h
        installpath = include/infer
     end
 
