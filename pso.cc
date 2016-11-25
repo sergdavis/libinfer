@@ -90,25 +90,15 @@ void Minimizer::SetBoundary(const State & b1, const State & b2)
  boundary_set = true;
 }
 
-bool Outside(const State & p, const State & b1, const State & b2)
-{
- assert ((b1.Size() == b2.Size()) && (p.Size() == b1.Size()));
- for (int q=0;q<b1.Size();++q)
- {
-  if ((p[q] > b2[q]) || (p[q] < b1[q])) return true;
- }
- return false;
-}
-
 void Minimizer::AdvanceParticles(const ObjectiveFunction & obj, const State & globalmin)
 {
  for (int i=0;i<nparticles;++i)
  {
-  if (boundary_set) assert (!Outside(x[i], b1, b2));
+  if (boundary_set) assert (!x[i].Outside(b1, b2));
   double r1 = Random();
   double r2 = Random();
   v[i] = v[i]*omega + (localmin[i]-x[i])*c1*r1 + (globalmin-x[i])*c2*r2;
-  if ((boundary_set) && (Outside(x[i] + v[i], b1, b2)))
+  if ((boundary_set) && ((x[i]+v[i]).Outside(b1, b2)))
   {
    for (int q=0;q<v[i].Size();++q) v[i][q] = -1.0*v[i][q];
   }
@@ -130,7 +120,7 @@ const State & Minimizer::Minimize(const ObjectiveFunction & obj, const State & s
    x[i][q] = b1[q]+(0.1+0.8*Random())*(b2[q]-b1[q]);
    v[i][q] = SignRandom();
   }
-  assert (!Outside(x[i], b1, b2));
+  assert (!x[i].Outside(b1, b2));
   localmin[i] = x[i];
  }
  x[0] = seed;

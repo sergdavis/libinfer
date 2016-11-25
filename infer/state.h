@@ -11,11 +11,12 @@
 #include <cassert>
 #include <initializer_list>
 #include "random.h"
+#include "region.h"
 
 //
 //
 //
-class State
+class State: public Confined
 {
  public:
    State() { buffer = NULL; N = 0; }
@@ -48,6 +49,16 @@ class State
    }
 
    virtual ~State() { delete [] buffer; }
+   
+   bool Outside(const State & b1, const State & b2) const override
+   {
+    assert ((b1.Size() == b2.Size()) && (Size() == b1.Size()));
+    for (int q=0;q<b1.Size();++q)
+    {
+     if (((*this)[q] > b2[q]) || ((*this)[q] < b1[q])) return true;
+    }
+    return false;
+   }
 
    const State & operator=(const State & s)
    {
