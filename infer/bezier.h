@@ -29,7 +29,7 @@ inline double ddotb(int i, int N, double t)
 class Bezier 
 {
  public:
-    Bezier(const std::vector<State> & S): ctrpoints(S) { ncontrol = S.size(); }
+    Bezier(const std::vector<State> & S): ctrpoints(S) { ncontrol = S.size(); t1 = 0.0; t2 = 1.0;}
    
 	Bezier(const std::initializer_list<State> & S)
     {
@@ -39,17 +39,26 @@ class Bezier
 	  ncontrol +=1;
 	  ctrpoints.push_back(*it);
      }
+     t1 = 0.0;
+     t2 = 1.0;
     }
 
     Bezier(int N)
     {
      for (int i=0;i<N;++i) ctrpoints.push_back(State());
      ncontrol = N;
+     t1 = 0.0;
+     t2 = 1.0;
     }
+
+    void SetInitialTime(double t) { t1 = t; }
+
+    void SetFinalTime(double t) { t2 = t; }
 
     virtual State operator()(double t) const
     {
 	 State s(ctrpoints[0].Size());
+     t = (t-t1)/(t2-t1);
 	 for (unsigned int j=0; j < ctrpoints.size(); j++)
      {
 	  for (int i=0; i <= ctrpoints[j].Size(); i++)
@@ -62,6 +71,7 @@ class Bezier
 
 	State Dot(double t) const 
     { 
+     t = (t-t1)/(t2-t1);
 	 State s(ctrpoints[0].Size());
 	 for (unsigned int j=0; j < ctrpoints.size(); j++)
      {
@@ -75,6 +85,7 @@ class Bezier
 
 	State Ddot(double t) const 
     { 
+     t = (t-t1)/(t2-t1);
 	 State s(ctrpoints[0].Size());
 	 for (unsigned int j=0; j < ctrpoints.size(); j++)
      {
@@ -114,6 +125,7 @@ private:
    int ncontrol; 
    double exctrpoint; 
    int i; int j;
+   double t1, t2;
 };
 
 #endif
