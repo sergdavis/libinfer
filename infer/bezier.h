@@ -99,7 +99,7 @@ class Bezier
 
 	int Size() const { return ctrpoints[0].Size(); }
 
-	void Mutate(double delta)
+	virtual void Mutate(double delta)
     {
 	 if(ctrpoints.size() > 2)
      {
@@ -115,15 +115,17 @@ class Bezier
 	 ctrpoints[i][j] += SignRandom()*delta;
     }
 
-	void UndoMutation() { ctrpoints[i][j] = exctrpoint; }
+	virtual void UndoMutation() { ctrpoints[i][j] = exctrpoint; }
 
     const std::vector <State> & ControlPoints() const { return ctrpoints; }
     std::vector <State> & ControlPoints() { return ctrpoints; }
 
-private:
+protected:
    std::vector <State> ctrpoints;
+   double exctrpoint;
+
+private:
    int ncontrol; 
-   double exctrpoint; 
    int i; int j;
    double t1, t2;
 };
