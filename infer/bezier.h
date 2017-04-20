@@ -123,10 +123,10 @@ class Bezier
 protected:
    std::vector <State> ctrpoints;
    double exctrpoint;
+   int i; int j;
 
 private:
    int ncontrol; 
-   int i; int j;
    double t1, t2;
 };
 
